@@ -11,6 +11,7 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text LastScoreText;
     public GameObject GameOverText;
     
     private bool m_Started = false;
@@ -36,6 +37,8 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+
+        LastScoreText.text = "Last score \n Name: " + PersistanceManager.Instance.playerName + "\n Score: " + PersistanceManager.Instance.playerScore;
     }
 
     private void Update()
@@ -57,6 +60,8 @@ public class MainManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                PersistanceManager.Instance.LoadLastScore();
+                LastScoreText.text = "Last score \n Name: " + PersistanceManager.Instance.playerName + "\n Score: " + PersistanceManager.Instance.playerScore;
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
@@ -72,5 +77,7 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        PersistanceManager.Instance.StoreLastScore(PersistanceManager.Instance.inputName, m_Points);
+        Debug.Log("player: " + PersistanceManager.Instance.inputName + " score: " + m_Points);
     }
 }
